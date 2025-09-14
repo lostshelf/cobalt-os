@@ -3,10 +3,10 @@ global _stage2
 
 _stage2:
     mov ah, 0x9
-    mov al, 0x59
+    mov al, 'Y'
     mov bh, 0x0
-    mov bl, 0b0111
-    mov cx, 0x0
+    mov bl, 0x7
+    mov cx, 0x1
     int 0x10
 
     ; Get memory map
@@ -18,5 +18,12 @@ _stage2:
     mov eax, 0xE820
     mov ecx, 24
     int 0x15
+
+    mov ah, 0x9
+    mov al, 0x59
+    mov bh, 0x0
+    mov bl, 0b0111
+    mov cx, 0x1
+    int 0x10
 
     

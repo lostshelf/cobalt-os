@@ -44,9 +44,9 @@ $(STAGE1_ELF): $(STAGE1_SRC)
 	$(ASM) -f elf32 -I $(NASM_INC) -g $< -o $(BUILD)/stage1.o
 	$(LD) $(LDFLAGS) -T $(STAGE1_LD) $(BUILD)/stage1.o -o $@
 
-$(STAGE1_BIN): $(STAGE1_ELF)
+$(STAGE1_BIN): $(STAGE1_SRC)
 	@mkdir -p $(BUILD)
-	objcopy -O binary $< $@
+	$(ASM) -f bin -I $(NASM_INC) $< -o $@
 
 # Stage2
 $(STAGE2_ELF): $(STAGE2_SRC)
@@ -69,7 +69,7 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 	objcopy -O binary $< $@ 
 
 # Final OS image
-$(OS_IMAGE): $(STAGE1_BIN) $(STAGE2_BIN) $(KERNEL_BIN)
+$(OS_IMAGE): $(STAGE1_BIN) $(STAGE2_BIN)
 	cat $^ > $@
 
 # Clean
@@ -77,7 +77,7 @@ clean:
 	rm -rf $(BUILD)
 
 debug: $(OS_IMAGE) $(STAGE1_ELF) $(STAGE2_ELF) $(KERNEL_ELF)
-	qemu-system-i386 -fda $< -S -gdb tcp::1234
+	qemu-system-i386 -drive format=raw,file=$< -S -gdb tcp::1234
 
 run: $(OS_IMAGE)
 	qemu-system-i386 -drive format=raw,file=$<

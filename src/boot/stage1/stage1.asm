@@ -1,3 +1,4 @@
+[org 0x7c00]
 [bits 16]
 
 %include "printing.asm"
@@ -16,6 +17,10 @@ _start:
     ; Not 0xFFFF as that would mess up the alignment
     mov sp, 0xFFFE
 
+    mov ah, 0x0e
+    mov al, 'x'
+    int 0x10
+
     ; Load second stage into memory
     mov ah, 0x2    ; No idea why is 0x2 but that's what Ralph Brown is telling me to do 
     mov al, 0x1    ; Number of sectors to read. I only want 1.
@@ -27,15 +32,8 @@ _start:
 
     jc .disk_error
 
-    mov ah, 0x9
-    mov al, 0x58
-    mov bh, 0x0
-    mov bl, 0b0111
-    mov cx, 0x0
-    int 0x10
-
     ; Jump to the second stage bootloader
-    ; jmp 0x8000
+    jmp 0x8000
 
 .disk_error:
     mov ah, 0x9
