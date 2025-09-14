@@ -1,5 +1,5 @@
-[bits 16]
 [org 0x7c00]
+[bits 16]
 
 _start:
     cli
@@ -38,12 +38,13 @@ _start:
 
 .disk_error:
     mov ah, 0x9
-    mov al, 0x59
+    mov al, 92
     mov bh, 0x0
     mov bl, 0b111
     mov cx, 0x1
     int 0x10
-    hlt
+    
+    jmp .disk_error
 
 ; Fill the remaining boot sector with 0s
 times 510-($-$$) db 0
