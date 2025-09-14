@@ -2,6 +2,13 @@
 [bits 16]
 
 _stage2:
+    mov ah, 0x9
+    mov al, 0x59
+    mov bh, 0x0
+    mov bl, 0b0111
+    mov cx, 0x0
+    int 0x10
+
     ; Get memory map
     xor ax, ax
     mov es, ax
